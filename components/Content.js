@@ -7,19 +7,15 @@ import {
   Text,
   View,
 } from "react-native";
-import { menu_list } from "../assets/assets";
+import { menu_list, food_list } from "../assets/assets";
+
 export default function Content() {
   const info = menu_list;
   const { width, height } = Dimensions.get("screen");
-  return (
-    <View style={styles.content}>
-      <View
-        style={{
-          width: width,
-          height: height,
-          padding: 15,
-        }}
-      >
+
+  const renderHeader = () => (
+    <View>
+      <View style={{ width: width, padding: 10 }}>
         <View style={styles.card}>
           <View style={{ width: "100%", height: "85%" }}>
             <Image
@@ -46,58 +42,74 @@ export default function Content() {
             </Text>
           </View>
         </View>
-        <View
-          style={{
-            width: width,
-            height: 130,
-            // backgroundColor: "pink",
-            marginHorizontal: -15,
-            marginTop: 20,
-          }}
-        >
-          <FlatList
-            data={info}
-            renderItem={({ item }) => (
-              <View
+      </View>
+      <View
+        style={{
+          width: width,
+          height: 130,
+          marginTop: 20,
+        }}
+      >
+        <FlatList
+          data={info}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                width: 90,
+                height: 90,
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                marginHorizontal: 5,
+              }}
+            >
+              <Image
+                source={item.menu_image}
                 style={{
-                  width: 90,
-                  height: 90,
-                  marginLeft: 10,
-                  marginRight: 10,
-
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
+                  width: "100%",
+                  height: "100%",
+                  borderWidth: 3,
+                  borderColor: "#FF4C24",
+                  borderRadius: 50,
                 }}
-              >
-                <Image
-                  source={item.menu_image}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    borderWidth: 3,
-                    borderColor: "#FF4C24",
-                    borderRadius: 50,
-                  }}
-                />
-                <Text style={{ paddingTop: 10, fontSize: 16 }}>
-                  {item.menu_name}
-                </Text>
-              </View>
-            )}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled
-          />
-        </View>
+              />
+              <Text style={{ paddingTop: 10, fontSize: 16 }}>
+                {item.menu_name}
+              </Text>
+            </View>
+          )}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+        />
       </View>
     </View>
   );
+
+  return (
+    <View style={styles.content}>
+      <FlatList
+        data={food_list}
+        ListHeaderComponent={renderHeader}
+        renderItem={({ item }) => (
+          <View key={item._id} style={styles.foodCard}>
+            <Image source={item.image} style={styles.foodImage} />
+            <View style={styles.foodInfo}>
+              <Text style={styles.foodName}>{item.name}</Text>
+              <Text style={styles.foodDescription}>{item.description}</Text>
+              <Text style={styles.foodPrice}>${item.price}</Text>
+            </View>
+          </View>
+        )}
+        keyExtractor={(item) => item._id}
+      />
+    </View>
+  );
 }
+
 const styles = StyleSheet.create({
   content: {
     flex: 8,
-    // backgroundColor: "lightgrey",
   },
   card: {
     height: 275,
@@ -105,5 +117,37 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 10,
     elevation: 5,
+  },
+  foodCard: {
+    flexDirection: "row",
+    padding: 10,
+    marginVertical: 5,
+    backgroundColor: "white",
+    borderRadius: 10,
+    elevation: 5,
+    margin: 10,
+  },
+  foodImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+  },
+  foodInfo: {
+    flex: 1,
+    marginLeft: 10,
+    justifyContent: "center",
+  },
+  foodName: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  foodDescription: {
+    fontSize: 14,
+    color: "gray",
+  },
+  foodPrice: {
+    fontSize: 16,
+    color: "#FF4C24",
+    fontWeight: "bold",
   },
 });
