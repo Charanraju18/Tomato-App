@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { menu_list, food_list } from "../assets/assets";
@@ -12,6 +13,8 @@ import { menu_list, food_list } from "../assets/assets";
 export default function Content() {
   const info = menu_list;
   const { width, height } = Dimensions.get("screen");
+
+  const [selectedMenu, setSelectedMenu] = React.useState(null);
 
   const renderHeader = () => (
     <View>
@@ -53,34 +56,38 @@ export default function Content() {
         <FlatList
           data={info}
           renderItem={({ item }) => (
-            <View
-              style={{
-                width: 90,
-                height: 90,
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                marginHorizontal: 5,
-              }}
+            <TouchableOpacity
+              style={[
+                {
+                  width: 90,
+                  height: 90,
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  marginHorizontal: 5,
+                  borderRadius: 50,
+                },
+                selectedMenu === item.menu_name && styles.activeFood,
+              ]}
+              onPress={() => setSelectedMenu(item.menu_name)}
             >
               <Image
                 source={item.menu_image}
                 style={{
                   width: "100%",
                   height: "100%",
-                  borderWidth: 3,
-                  borderColor: "#FF4C24",
                   borderRadius: 50,
                 }}
               />
               <Text style={{ paddingTop: 10, fontSize: 16 }}>
                 {item.menu_name}
               </Text>
-            </View>
+            </TouchableOpacity>
           )}
           horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
+          showsHorizontalScrollIndicator={true}
+          extraData={selectedMenu}
+          keyExtractor={(item, index) => item._id || index.toString()}
         />
       </View>
     </View>
@@ -101,13 +108,16 @@ export default function Content() {
             </View>
           </View>
         )}
-        keyExtractor={(item) => item._id}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  activeFood: {
+    borderWidth: 3,
+    borderColor: "#FF4C24",
+  },
   content: {
     flex: 8,
   },
