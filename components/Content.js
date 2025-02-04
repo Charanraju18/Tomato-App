@@ -3,13 +3,14 @@ import {
   Dimensions,
   FlatList,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { menu_list, food_list } from "../assets/assets";
-
+import Header from "./Header";
 export default function Content() {
   const info = menu_list;
   const { width, height } = Dimensions.get("screen");
@@ -67,7 +68,7 @@ export default function Content() {
                   marginHorizontal: 5,
                   borderRadius: 50,
                 },
-                selectedMenu === item.menu_name && styles.activeFood,
+                selectedMenu === item.menu_name ? styles.activeFood : null,
               ]}
               onPress={() => setSelectedMenu(item.menu_name)}
             >
@@ -95,20 +96,23 @@ export default function Content() {
 
   return (
     <View style={styles.content}>
-      <FlatList
-        data={food_list}
-        ListHeaderComponent={renderHeader}
-        renderItem={({ item }) => (
-          <View key={item._id} style={styles.foodCard}>
-            <Image source={item.image} style={styles.foodImage} />
-            <View style={styles.foodInfo}>
-              <Text style={styles.foodName}>{item.name}</Text>
-              <Text style={styles.foodDescription}>{item.description}</Text>
-              <Text style={styles.foodPrice}>${item.price}</Text>
+      <Header />
+      <View>
+        <FlatList
+          data={food_list}
+          ListHeaderComponent={renderHeader}
+          renderItem={({ item }) => (
+            <View key={item._id} style={styles.foodCard}>
+              <Image source={item.image} style={styles.foodImage} />
+              <View style={styles.foodInfo}>
+                <Text style={styles.foodName}>{item.name}</Text>
+                <Text style={styles.foodDescription}>{item.description}</Text>
+                <Text style={styles.foodPrice}>${item.price}</Text>
+              </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
+      </View>
     </View>
   );
 }
