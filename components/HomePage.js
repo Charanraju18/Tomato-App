@@ -4,6 +4,12 @@ import Icon from "react-native-vector-icons/Ionicons";
 import Content from "./Content";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
+import Favorites from "./Favorites";
+import Cart from "./Cart";
+import Profile from "./Profile";
+import Search from "./Search";
+import { createStackNavigator } from "@react-navigation/stack";
+import RestaurantPage from "./RestaurantPage";
 export default function HomePage() {
   const BottomBar = createBottomTabNavigator();
   return (
@@ -36,15 +42,44 @@ export default function HomePage() {
           },
         })}
       >
-        <BottomBar.Screen name="Home" component={Content} />
-        <BottomBar.Screen name="Favorite" component={Content} />
-        <BottomBar.Screen name="Search" component={Content} />
-        <BottomBar.Screen name="Cart" component={Content} />
-        <BottomBar.Screen name="Profile" component={Content} />
+        <BottomBar.Screen name="Home" component={Home} />
+        <BottomBar.Screen name="Favorite" component={Fav} />
+        <BottomBar.Screen name="Search" component={Search} />
+        <BottomBar.Screen name="Cart" component={Cart} />
+        <BottomBar.Screen name="Profile" component={Profile} />
       </BottomBar.Navigator>
     </NavigationContainer>
   );
 }
+
+const Home = () => {
+  const stack = createStackNavigator();
+  return (
+    <stack.Navigator screenOptions={{ headerShown: false }}>
+      <stack.Screen name="HomeStack" component={Content} />
+      <stack.Screen
+        name="RestaurantDetail"
+        component={RestaurantPage}
+        options={{ headerShown: false }}
+      />
+    </stack.Navigator>
+  );
+};
+
+const Fav = () => {
+  const stack = createStackNavigator();
+  return (
+    <stack.Navigator screenOptions={{ headerShown: false }}>
+      <stack.Screen name="HomeStack" component={Favorites} />
+      <stack.Screen
+        name="RestaurantDetail"
+        component={RestaurantPage}
+        options={{ headerShown: false }}
+      />
+    </stack.Navigator>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

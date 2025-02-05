@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-export default function Cart() {
+export default function Search() {
   return (
     <View>
-      <Text>Cart</Text>
+      <Text>Search</Text>
     </View>
   );
 }

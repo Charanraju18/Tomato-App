@@ -9,9 +9,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { menu_list, food_list } from "../assets/assets";
+import { menu_list, food_list, restaurant_info } from "../assets/assets";
 import Header from "./Header";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/Ionicons";
 export default function Content() {
+  const navigation = useNavigation();
   const info = menu_list;
   const { width, height } = Dimensions.get("screen");
 
@@ -94,25 +97,61 @@ export default function Content() {
     </View>
   );
 
+  const [restaurantInfo, setRestaurantInfo] = React.useState([]);
+
+  React.useEffect(() => {
+    const sortedRestaurants = restaurant_info.sort(
+      (a, b) => b.rating - a.rating
+    );
+    setRestaurantInfo(sortedRestaurants);
+  }, []);
+
+  const navigateToRestaurant = (restaurant) => {
+    navigation.navigate("RestaurantDetail", { restaurant });
+  };
+
   return (
     <View style={styles.content}>
       <Header />
-      <View>
-        <FlatList
-          data={food_list}
-          ListHeaderComponent={renderHeader}
-          renderItem={({ item }) => (
-            <View key={item._id} style={styles.foodCard}>
-              <Image source={item.image} style={styles.foodImage} />
-              <View style={styles.foodInfo}>
-                <Text style={styles.foodName}>{item.name}</Text>
-                <Text style={styles.foodDescription}>{item.description}</Text>
-                <Text style={styles.foodPrice}>${item.price}</Text>
-              </View>
+      <FlatList
+        data={restaurantInfo}
+        ListHeaderComponent={renderHeader}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            key={item.restaurant_id}
+            style={styles.restaurantCard}
+            onPress={() => navigateToRestaurant(item)}
+          >
+            <Image source={item.image} style={styles.restaurantImage} />
+            <View style={styles.overlayIcons}>
+              <TouchableOpacity>
+                <Icon
+                  name={item.isFav ? "bookmark" : "bookmark-outline"}
+                  size={20}
+                  color={item.isFav ? "#FF4C24" : "#fff"}
+                />
+              </TouchableOpacity>
             </View>
-          )}
-        />
-      </View>
+            <View style={styles.restaurantDetails}>
+              <View style={styles.titleRow}>
+                <Text style={styles.restaurantName}>
+                  {item.Restaurant_name}
+                </Text>
+                <View style={styles.ratingBox}>
+                  <Text style={styles.ratingText}>⭐ {item.rating}</Text>
+                </View>
+              </View>
+              <View style={styles.metaInfo}>
+                <Text style={styles.deliveryInfo}>
+                  ⏳ {item.time} mins • 📍 {item.distance} km
+                </Text>
+              </View>
+              {item.offer && <Text style={styles.offerText}>{item.offer}</Text>}
+            </View>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item.restaurant_id}
+      />
     </View>
   );
 }
@@ -132,36 +171,62 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 5,
   },
-  foodCard: {
+  restaurantCard: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 12,
+    overflow: "hidden",
+    elevation: 3,
+  },
+  restaurantImage: {
+    width: "100%",
+    height: 180,
+    resizeMode: "cover",
+  },
+  overlayIcons: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    padding: 6,
+    borderRadius: 20,
+  },
+  restaurantDetails: {
+    padding: 12,
+  },
+  titleRow: {
     flexDirection: "row",
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: "white",
-    borderRadius: 10,
-    elevation: 5,
-    margin: 10,
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  foodImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 10,
-  },
-  foodInfo: {
-    flex: 1,
-    marginLeft: 10,
-    justifyContent: "center",
-  },
-  foodName: {
+  restaurantName: {
     fontSize: 18,
     fontWeight: "bold",
   },
-  foodDescription: {
-    fontSize: 14,
-    color: "gray",
+  ratingBox: {
+    backgroundColor: "#27AE60",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 5,
   },
-  foodPrice: {
-    fontSize: 16,
-    color: "#FF4C24",
+  ratingText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  restaurantLocation: {
+    color: "#555",
+    marginTop: 2,
+  },
+  metaInfo: {
+    marginTop: 6,
+  },
+  deliveryInfo: {
+    color: "#777",
+  },
+  offerText: {
+    marginTop: 6,
+    color: "#D32F2F",
     fontWeight: "bold",
   },
 });
