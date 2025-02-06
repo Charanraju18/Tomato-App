@@ -11,7 +11,8 @@ import { restaurant_info } from "../assets/assets";
 import Header from "./Header";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
-export default function Favorites() {
+
+const FavoritesFood = () => {
   const navigation = useNavigation();
   const [restaurantInfo, setRestaurantInfo] = React.useState([]);
 
@@ -28,7 +29,6 @@ export default function Favorites() {
 
   return (
     <View style={styles.content}>
-      <Header />
       <FlatList
         data={restaurantInfo}
         renderItem={({ item }) => (
@@ -65,7 +65,18 @@ export default function Favorites() {
       />
     </View>
   );
+};
+
+function Favorites() {
+  return (
+    <>
+      <Header />
+      <FavoritesFood />
+    </>
+  );
 }
+
+export default Favorites;
 
 const styles = StyleSheet.create({
   content: {
