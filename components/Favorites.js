@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Dimensions,
   FlatList,
   Image,
   StyleSheet,
@@ -66,7 +67,7 @@ const FavoritesFood = () => {
     </View>
   );
 };
-
+const { width, height } = Dimensions.get("screen");
 function Favorites() {
   return (
     <>

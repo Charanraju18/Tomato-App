@@ -105,7 +105,7 @@ export default function Search() {
               gap: 10,
             }}
           >
-            <Text style={{ fontSize: 27 }}>|</Text>
+            <Text style={{ fontSize: 27, paddingBottom: 10 }}>|</Text>
             <Icon name="mic" size={20} color="black" />
           </View>
         </View>

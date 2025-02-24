@@ -94,6 +94,11 @@ export default function Content() {
           keyExtractor={(item, index) => item._id || index.toString()}
         />
       </View>
+      <View style={{ width: width, paddingHorizontal: 15 }}>
+        <Text style={{ fontSize: 22, color: "#000" }}>
+          Restaurants Near You
+        </Text>
+      </View>
     </View>
   );
 
